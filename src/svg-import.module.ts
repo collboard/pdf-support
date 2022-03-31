@@ -1,16 +1,17 @@
+import {
+    blobToDataUrl,
+    centerArts,
+    declareModule,
+    fitInside,
+    ImageArt,
+    measureImageSize,
+    patternToRegExp,
+    string_mime_type_with_wildcard,
+} from '@collboard/modules-sdk';
 import { forImmediate } from 'waitasecond';
-import { blobToDataUrl } from '../../../../40-utils/blobToDataUrl';
-import { fitInside } from '../../../../40-utils/fitInside';
-import { measureImageSize } from '../../../../40-utils/measureImageSize';
-import { patternToRegExp } from '../../../../40-utils/patternToRegExp';
-import { centerArts } from '../../../../50-systems/ExportImportSystem/utils/centerArts';
-import { internalModules } from '../../../../50-systems/ModuleStore/internalModules';
-import { string_mime_type_with_wildcard } from '../../../../CollboardSdk';
-import { ImageSvgArt } from './ImageSvgArt';
-
 const mimeTypes: string_mime_type_with_wildcard[] = ['application/pdf'];
 
-internalModules.declareModule({
+declareModule({
     manifest: {
         name: '@collboard/svg-import',
         supports: {
@@ -42,7 +43,7 @@ internalModules.declareModule({
                     containerSize: appState.windowSize.divide(appState.transform.scale),
                 });
 
-                const imageArt = new ImageSvgArt(imageSrc, 'image');
+                const imageArt = new ImageArt(imageSrc, 'image');
                 imageArt.size = imageScaledSize;
                 imageArt.opacity = 0.5;
 
