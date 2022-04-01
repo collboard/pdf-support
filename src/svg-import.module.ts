@@ -9,11 +9,21 @@ import {
     string_mime_type_with_wildcard,
 } from '@collboard/modules-sdk';
 import { forImmediate } from 'waitasecond';
+import { contributors, description, license, repository, version } from '../package.json';
+
 const mimeTypes: string_mime_type_with_wildcard[] = ['application/pdf'];
 
 declareModule({
     manifest: {
         name: '@collboard/svg-import',
+        contributors,
+        description,
+        license,
+        repository,
+        version,
+        flags: {
+            isHidden: true /* <- TODO: (File) support modules should be always hidden*/,
+        },
         supports: {
             fileImport: mimeTypes,
         },
