@@ -6,14 +6,11 @@ import {
     fitInside,
     ImageArt,
     measureImageSize,
-    patternToRegExp,
-    string_mime_type_with_wildcard,
 } from '@collboard/modules-sdk';
-import { forEver } from 'waitasecond';
 import { contributors, description, license, repository, version } from '../package.json';
 import { pdfToImages } from './pdfToImages';
 
-const mimeTypes: string_mime_type_with_wildcard[] = ['application/pdf'];
+console.log(Math.random());
 
 declareModule({
     manifest: {
@@ -27,7 +24,7 @@ declareModule({
             isHidden: true /* <- TODO: (File) support modules should be always hidden*/,
         },
         supports: {
-            fileImport: mimeTypes,
+            fileImport: 'application/pdf',
         },
     },
     async setup(systems) {
@@ -42,9 +39,11 @@ declareModule({
         return importSystem.registerFileSupport({
             priority: 10,
             async processFile({ logger, file, boardPosition, previewOperation, next }) {
-                if (!mimeTypes.some((mimeType) => patternToRegExp(mimeType).test(file.type))) {
+                if (file.type !== 'application/pdf') {
                     return next();
                 }
+
+                // Note: DO NOT select created arts - DO not call willCommitArts
 
                 const pdfFile = file;
 
@@ -69,15 +68,11 @@ declareModule({
 
                 previewOperation.update(imageArt);
 
-                await forEver();
-
                 imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageSrc));
                 imageArt.src = imageSrc;
                 imageArt.opacity = 1;
 
                 const operation = materialArtVersioningSystem.createPrimaryOperation().newArts(imageArt).persist();
-
-                // Note: DO NOT select created arts
 
                 return operation;
             },
