@@ -1,6 +1,7 @@
 import {
     blobToDataUrl,
     centerArts,
+    dataUrlToBlob,
     declareModule,
     fitInside,
     ImageArt,
@@ -8,14 +9,15 @@ import {
     patternToRegExp,
     string_mime_type_with_wildcard,
 } from '@collboard/modules-sdk';
-import { forImmediate } from 'waitasecond';
+import { forEver } from 'waitasecond';
 import { contributors, description, license, repository, version } from '../package.json';
+import { pdfToImages } from './pdfToImages';
 
 const mimeTypes: string_mime_type_with_wildcard[] = ['application/pdf'];
 
 declareModule({
     manifest: {
-        name: '@collboard/svg-import',
+        name: '@collboard/pdf-import',
         contributors,
         description,
         license,
@@ -29,27 +31,31 @@ declareModule({
         },
     },
     async setup(systems) {
-        const { importSystem, virtualArtVersioningSystem, apiClient, appState, materialArtVersioningSystem } =
-            await systems.request(
-                'importSystem',
-                'virtualArtVersioningSystem',
-                'apiClient',
-                'appState',
-                'materialArtVersioningSystem',
-            );
+        const { importSystem, apiClient, appState, materialArtVersioningSystem } = await systems.request(
+            'importSystem',
+
+            'apiClient',
+            'appState',
+            'materialArtVersioningSystem',
+        );
 
         return importSystem.registerFileSupport({
             priority: 10,
-            async processFile({ logger, file, boardPosition, next }) {
+            async processFile({ logger, file, boardPosition, previewOperation, next }) {
                 if (!mimeTypes.some((mimeType) => patternToRegExp(mimeType).test(file.type))) {
                     return next();
                 }
 
-                let imageSrc = await blobToDataUrl(file);
+                const pdfFile = file;
+
+                let pdfDataUrl = await blobToDataUrl(pdfFile);
+                let imageSrc = await pdfToImages(pdfDataUrl);
+
+                // await previewImage(imageSrc);
 
                 const imageScaledSize = fitInside({
                     isUpscaling: false,
-                    objectSize: await (await measureImageSize(file)).divide(appState.transform.scale),
+                    objectSize: await (await measureImageSize(imageSrc)).divide(appState.transform.scale),
                     containerSize: appState.windowSize.divide(appState.transform.scale),
                 });
 
@@ -57,29 +63,29 @@ declareModule({
                 imageArt.size = imageScaledSize;
                 imageArt.opacity = 0.5;
 
-                logger.info('Imported svg art', imageArt);
+                logger.info('Imported art', imageArt);
 
                 centerArts({ arts: [imageArt], boardPosition });
 
-                // Note: creating virtual art before  real is uploaded and processed
-                const imagePreview = virtualArtVersioningSystem.createPrimaryOperation().newArts(imageArt);
+                previewOperation.update(imageArt);
 
-                // TODO: Limit here max size of images> if(imageSize.x>this.systems.appState.windowSize*transform)
+                await forEver();
 
-                imageSrc = await apiClient.fileUpload(file);
+                imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageSrc));
                 imageArt.src = imageSrc;
                 imageArt.opacity = 1;
 
                 const operation = materialArtVersioningSystem.createPrimaryOperation().newArts(imageArt).persist();
 
-                imagePreview.abort();
-
-                // TODO: [🐅] Everytime when importing sth select this new art and do it DRY - via return operation;
-                await forImmediate();
-                appState.setSelection({ selected: [imageArt] });
+                // Note: DO NOT select created arts
 
                 return operation;
             },
         });
     },
 });
+
+/**
+ * TODO: Better tooling around PDFs
+ * TODO: Maybe create PdfArt
+ */
