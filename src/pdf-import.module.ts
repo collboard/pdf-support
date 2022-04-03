@@ -10,8 +10,6 @@ import {
 import { contributors, description, license, repository, version } from '../package.json';
 import { pdfToImages } from './pdfToImages';
 
-console.log(Math.random());
-
 declareModule({
     manifest: {
         name: '@collboard/pdf-import',
@@ -47,8 +45,8 @@ declareModule({
 
                 const pdfFile = file;
 
-                let pdfDataUrl = await blobToDataUrl(pdfFile);
-                let imageSrc = await pdfToImages(pdfDataUrl);
+                const pdfDataUrl = await blobToDataUrl(pdfFile);
+                const imageSrc = await pdfToImages(pdfDataUrl);
 
                 // await previewImage(imageSrc);
 

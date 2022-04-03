@@ -10,35 +10,23 @@ export async function pdfToImages(pdfUrl: string_url): Promise<string_url /* !!!
 
     const pdfjsLib = (window as any).pdfjsLib;
 
-    console.log('pdfjsLib', pdfjsLib);
-
     const pdfDocument = await pdfjsLib.getDocument({ url: pdfUrl });
 
-    console.log('pdfDocument', pdfDocument);
-
-    const pdfPagesCount = pdfDocument.numPages;
-
-    console.log('pdfPagesCount', pdfPagesCount);
+    // const pdfPagesCount = pdfDocument.numPages;
 
     const page = await pdfDocument.getPage(1 /* TODO: !!! Get all pages */);
-
-    console.log('page', page);
 
     const canvas = document.createElement('canvas');
     const { width, height } = page.getViewport(1);
     canvas.width = width;
     canvas.height = height;
 
-    console.log('canvas', canvas);
-
     const viewport = page.getViewport(1 /* !!! Do we need this param */);
 
     await page.render({
         canvasContext: canvas.getContext('2d'),
-        viewport: viewport,
+        viewport,
     });
-
-    console.log('canvas', canvas);
 
     return canvas.toDataURL('image/png');
 }
