@@ -10,8 +10,6 @@ import {
 import { contributors, description, license, repository, version } from '../package.json';
 import { pdfToImages } from './pdfToImages';
 
-console.log(Math.random());
-
 declareModule({
     manifest: {
         name: '@collboard/pdf-import',
@@ -47,18 +45,18 @@ declareModule({
 
                 const pdfFile = file;
 
-                let pdfDataUrl = await blobToDataUrl(pdfFile);
-                let imageSrc = await pdfToImages(pdfDataUrl);
+                const pdfDataUrl = await blobToDataUrl(pdfFile);
+                const imageDataUrl = await pdfToImages(pdfDataUrl);
 
                 // await previewImage(imageSrc);
 
                 const imageScaledSize = fitInside({
                     isUpscaling: false,
-                    objectSize: await (await measureImageSize(imageSrc)).divide(appState.transform.scale),
+                    objectSize: await (await measureImageSize(imageDataUrl)).divide(appState.transform.scale),
                     containerSize: appState.windowSize.divide(appState.transform.scale),
                 });
 
-                const imageArt = new ImageArt(imageSrc, 'image');
+                const imageArt = new ImageArt(imageDataUrl, 'image');
                 imageArt.size = imageScaledSize;
                 imageArt.opacity = 0.5;
 
@@ -68,7 +66,7 @@ declareModule({
 
                 previewOperation.update(imageArt);
 
-                imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageSrc));
+                const imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageDataUrl));
                 imageArt.src = imageSrc;
                 imageArt.opacity = 1;
 
