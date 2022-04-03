@@ -1,6 +1,6 @@
 import { loadAndRunExternalScript, string_url } from '@collboard/modules-sdk';
 
-export async function pdfToImages(pdfUrl: string_url): Promise<string_url /* !!! [] */> {
+export async function pdfToImages(pdfUrl: string_url): Promise<string_url [] > {
     // Note: I can not figure out how to install this library via NPM
     //       TODO: Probbably put it into module assets to not rely on CDN
     //       TODO: loadAndRunExternalScriptOnce
@@ -10,26 +10,21 @@ export async function pdfToImages(pdfUrl: string_url): Promise<string_url /* !!!
 
     const pdfjsLib = (window as any).pdfjsLib;
 
-    console.log('pdfjsLib', pdfjsLib);
 
     const pdfDocument = await pdfjsLib.getDocument({ url: pdfUrl });
 
-    console.log('pdfDocument', pdfDocument);
 
     const pdfPagesCount = pdfDocument.numPages;
 
-    console.log('pdfPagesCount', pdfPagesCount);
+const images: 
 
-    const page = await pdfDocument.getPage(1 /* TODO: !!! Get all pages */);
+    const page = await pdfDocument.getPage(1);
 
-    console.log('page', page);
 
     const canvas = document.createElement('canvas');
     const { width, height } = page.getViewport(1);
     canvas.width = width;
     canvas.height = height;
-
-    console.log('canvas', canvas);
 
     const viewport = page.getViewport(1 /* !!! Do we need this param */);
 
