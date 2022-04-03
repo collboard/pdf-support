@@ -6,7 +6,11 @@ import {
     fitInside,
     ImageArt,
     measureImageSize,
+    ShapeArt,
+    ShapeName,
 } from '@collboard/modules-sdk';
+import { Registration } from 'destroyable';
+import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../package.json';
 import { pdfToImages } from './pdfToImages';
 
@@ -36,49 +40,76 @@ declareModule({
 
         return importSystem.registerFileSupport({
             priority: 10,
-            async processFile({ logger, file, boardPosition, previewOperation, next }) {
+            async processFile({ logger, file, boardPosition, previewOperation, willCommitArts, next }) {
                 if (file.type !== 'application/pdf') {
                     return next();
                 }
 
-                // Note: DO NOT select created arts - DO not call willCommitArts
+                willCommitArts();
 
                 const pdfFile = file;
 
                 const pdfDataUrl = await blobToDataUrl(pdfFile);
-                const imageDataUrl = await pdfToImages(pdfDataUrl);
+                const imagesDataUrl = await pdfToImages(pdfDataUrl);
 
-                // await previewImage(imageSrc);
+                // Note: DO NOT select created arts by not returning operation
+                const result = Registration.void();
 
-                const imageScaledSize = fitInside({
-                    isUpscaling: false,
-                    objectSize: await (await measureImageSize(imageDataUrl)).divide(appState.transform.scale),
-                    containerSize: appState.windowSize.divide(appState.transform.scale),
-                });
+                for (const [i, imageDataUrl] of imagesDataUrl.entries()) {
+                    const imageArt = new ImageArt(
+                        imageDataUrl,
+                        `Page ${i + 1}/${imagesDataUrl.length} of ${pdfFile.name}`,
+                    );
+                    imageArt.size = fitInside({
+                        isUpscaling: false,
+                        objectSize: await (await measureImageSize(imageDataUrl)).divide(appState.transform.scale),
+                        containerSize: appState.windowSize.divide(appState.transform.scale),
+                    });
+                    imageArt.opacity = 0.5;
+                    imageArt.locked = true;
 
-                const imageArt = new ImageArt(imageDataUrl, 'image');
-                imageArt.size = imageScaledSize;
-                imageArt.opacity = 0.5;
+                    const borderArt = new ShapeArt(
+                        ShapeName.Rectange,
+                        '#ccc',
+                        3 / appState.transform.scale.x,
+                        imageArt.shift,
+                        imageArt.size,
+                    );
+                    // TODO: Maybe borderArt.opacity= 0.9;
+                    borderArt.locked = true;
 
-                logger.info('Imported art', imageArt);
+                    centerArts({
+                        arts: [imageArt, borderArt],
+                        boardPosition,
+                    });
 
-                centerArts({ arts: [imageArt], boardPosition });
+                    logger.info(`Page ${i + 1}/${imagesDataUrl.length}`, imageArt);
 
-                previewOperation.update(imageArt);
+                    boardPosition = boardPosition
+                        .add(new Vector(imageArt.size).rearrangeAxis(([x, y, z]) => [0, y, 0]))
+                        .add(new Vector(0, 30).scale(1 / appState.transform.scale.x));
 
-                const imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageDataUrl));
-                imageArt.src = imageSrc;
-                imageArt.opacity = 1;
+                    previewOperation.update(imageArt /* TODO: Also borderArt */);
 
-                const operation = materialArtVersioningSystem.createPrimaryOperation().newArts(imageArt).persist();
+                    const imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageDataUrl));
+                    imageArt.src = imageSrc;
+                    imageArt.opacity = 1;
 
-                return operation;
+                    const operation = materialArtVersioningSystem
+                        .createPrimaryOperation()
+                        .newArts(imageArt, borderArt)
+                        .persist();
+                    result.addSubdestroyable(operation);
+                }
+
+                return result;
             },
         });
     },
 });
 
 /**
+ * TODO: Do not make border by ShapeArt but make some better ImageArt
  * TODO: Better tooling around PDFs
  * TODO: Maybe create PdfArt
  */
