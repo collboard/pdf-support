@@ -1,4 +1,5 @@
 import {
+    Abstract2dArt,
     blobToDataUrl,
     centerArts,
     dataUrlToBlob,
@@ -9,7 +10,6 @@ import {
     ShapeArt,
     ShapeName,
 } from '@collboard/modules-sdk';
-import { Registration } from 'destroyable';
 import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../package.json';
 import { pdfToImages } from './pdfToImages';
@@ -45,6 +45,7 @@ declareModule({
                     return next();
                 }
 
+                // Note: DO NOT select created arts by not returning operation
                 willCommitArts();
 
                 const pdfFile = file;
@@ -52,8 +53,7 @@ declareModule({
                 const pdfDataUrl = await blobToDataUrl(pdfFile);
                 const imagesDataUrl = await pdfToImages(pdfDataUrl);
 
-                // Note: DO NOT select created arts by not returning operation
-                const result = Registration.void();
+                const result: Abstract2dArt[] = [];
 
                 for (const [i, imageDataUrl] of imagesDataUrl.entries()) {
                     const imageArt = new ImageArt(
@@ -95,11 +95,7 @@ declareModule({
                     imageArt.src = imageSrc;
                     imageArt.opacity = 1;
 
-                    const operation = materialArtVersioningSystem
-                        .createPrimaryOperation()
-                        .newArts(imageArt, borderArt)
-                        .persist();
-                    result.addSubdestroyable(operation);
+                    result.push(imageArt, borderArt);
                 }
 
                 return result;
