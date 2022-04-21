@@ -30,10 +30,9 @@ declareModule({
         },
     },
     async setup(systems) {
-        const { importSystem, apiClient, appState, materialArtVersioningSystem } = await systems.request(
+        const { importSystem, usercontentSystem, appState, materialArtVersioningSystem } = await systems.request(
             'importSystem',
-
-            'apiClient',
+            'usercontentSystem',
             'appState',
             'materialArtVersioningSystem',
         );
@@ -91,7 +90,7 @@ declareModule({
 
                     previewOperation.update(imageArt /* TODO: Also borderArt */);
 
-                    const imageSrc = await apiClient.fileUpload(await dataUrlToBlob(imageDataUrl));
+                    const imageSrc = await usercontentSystem.upload(await dataUrlToBlob(imageDataUrl));
                     imageArt.src = imageSrc;
                     imageArt.opacity = 1;
 
