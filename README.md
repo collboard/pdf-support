@@ -8,12 +8,10 @@ Support for PDF documents for [Collboard.com](https://collboard.com/) created vi
 
 
 [![License of 🖨️ PDF Documents for Collboard](https://img.shields.io/github/license/collboard/pdf-support.svg?style=flat)](https://github.com/collboard/pdf-support/blob/main/LICENSE)
-[![Quality of package 🖨️ PDF Documents for Collboard](https://packagequality.com/shield/pdf-support.svg)](https://packagequality.com/#?package=pdf-support)
 [![lint](https://github.com/collboard/pdf-support/actions/workflows/lint.yml/badge.svg)](https://github.com/collboard/pdf-support/actions/workflows/lint.yml)
 [![test](https://github.com/collboard/pdf-support/actions/workflows/test.yml/badge.svg)](https://github.com/collboard/pdf-support/actions/workflows/test.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/collboard/pdf-support/badge.svg)](https://snyk.io/test/github/collboard/pdf-support)
 [![Issues](https://img.shields.io/github/issues/collboard/pdf-support.svg?style=flat)](https://github.com/collboard/pdf-support/issues)
-<!--[![NPM Version of 🖨️ PDF Documents for Collboard](https://badge.fury.io/js/pdf-support.svg)](https://www.npmjs.com/package/pdf-support)-->
 
 <!--/Badges-->
 
