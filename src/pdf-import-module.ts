@@ -12,7 +12,7 @@ import {
 } from '@collboard/modules-sdk';
 import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../package.json';
-import { pdfToImages } from './pdfToImages';
+import { pdfToImages } from './utils/pdfToImages';
 
 declareModule({
     manifest: {
