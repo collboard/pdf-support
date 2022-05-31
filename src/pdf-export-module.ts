@@ -13,7 +13,19 @@ declareModule({
           priority: 0,
           mimeType: `image/pdf`,
           isHeavy: true,
-          export({ scope, boundingBox, isTesting }) {
+          export({ scope, boundingBox,
+
+
+            quality /* <- TODO: Use */,
+            scale /* <- TODO: Use */,
+            isMaterialized /* <- TODO: Use */,
+            isLinked /* <- TODO: Use */,
+            isHeavyIncluded /* <- TODO: Use */,
+            isTransparent /* <- TODO: Use */,
+            isTesting
+
+
+          }) {
               if (boundingBox.width * boundingBox.height === 0) {
                   return null;
               }
