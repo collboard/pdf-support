@@ -19,8 +19,7 @@ declareModule({
             quality /* <- TODO: Use */,
             scale /* <- TODO: Use */,
             isMaterialized /* <- TODO: Use */,
-            isLinked /* <- TODO: Use */,
-            isHeavyIncluded /* <- TODO: Use */,
+            isLinked /* <- TODO: Use */,,
             isTransparent /* <- TODO: Use */,
             isTesting
 
