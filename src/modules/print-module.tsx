@@ -1,15 +1,13 @@
+import { declareModule, DownloadPreviewComponent, makeModalModule } from '@collboard/modules-sdk';
 import React from 'react';
-import { internalModules } from '../../../../50-systems/ModuleStore/internalModules';
-import { makeModalModule } from '../../../../50-systems/ModuleStore/makers/makeModalModule';
-import { DownloadPreviewComponent } from './DownloadPreviewComponent';
 
 // TODO: [🐅] Maybe some more elegant way how to create icon-window pairs of modules
 
-internalModules.declareModule(
+declareModule(
     makeModalModule({
         manifest: {
-            name: '@collboard/download-preview',
-            title: { en: 'Download preview', cs: 'Náhled' },
+            name: '@collboard/print',
+            title: { en: 'Print', cs: 'Tisk' },
         },
         async createModal(systems) {
             const { exportSystem, translationsSystem, appState } = await systems.request(
@@ -18,11 +16,8 @@ internalModules.declareModule(
                 'appState',
             );
 
+            // !!! Implement
             return <DownloadPreviewComponent {...{ exportSystem, translationsSystem, appState }} />;
         },
     }),
 );
-
-/**
- * TODO: Allow to search for new modules
- */

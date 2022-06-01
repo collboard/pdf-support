@@ -1,6 +1,8 @@
 import { loadAndRunExternalScript, string_data_url } from '@collboard/modules-sdk';
 
 export async function pdfToImages(pdfUrl: string_data_url): Promise<string_data_url[]> {
+    // Note: [🍊] Using different lib for exporting and importing @see https://www.npmtrends.com/html-pdf-vs-jspdf-vs-pdf-vs-pdfjs-vs-pdfkit-vs-pdfmake-vs-pdf.js
+    //       TODO: Probbably use here also better and newer jspdf lib.
     // Note: I can not figure out how to install this library via NPM
     //       TODO: Probbably put it into module assets to not rely on CDN
     //       TODO: loadAndRunExternalScriptOnce
