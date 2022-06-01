@@ -1,9 +1,18 @@
 import { declareModule } from '@collboard/modules-sdk';
+import { contributors, description, license, repository, version } from '../../package.json';
 import { createPdf } from '../utils/createPdf';
 
 declareModule({
     manifest: {
         name: `@collboard/pdf-export`,
+        contributors,
+        description,
+        license,
+        repository,
+        version,
+        flags: {
+            isHidden: true /* <- TODO: (File) support modules should be always hidden*/,
+        },
     },
     async setup(systems) {
         const { exportSystem } = await systems.request('exportSystem');
@@ -11,7 +20,7 @@ declareModule({
         // TODO: This exporter is not implemented because of an error in browser "DOMException: Support for multiple ClipboardItems is not implemented.". If this solved, implement it.
         return exportSystem.registerFileSupport({
             priority: 0,
-            mimeType: `image/pdf`,
+            mimeType: `application/pdf`,
             isHeavy: true,
             export({
                 artContainers,

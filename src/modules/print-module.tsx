@@ -1,7 +1,5 @@
-import { declareModule, DownloadPreviewComponent, makeModalModule } from '@collboard/modules-sdk';
-import React from 'react';
-
-// TODO: [🐅] Maybe some more elegant way how to create icon-window pairs of modules
+import { declareModule, makeModalModule, React } from '@collboard/modules-sdk';
+import { PrintComponent } from '../components/PrintComponent';
 
 declareModule(
     makeModalModule({
@@ -16,8 +14,12 @@ declareModule(
                 'appState',
             );
 
-            // !!! Implement
-            return <DownloadPreviewComponent {...{ exportSystem, translationsSystem, appState }} />;
+            return <PrintComponent {...{ exportSystem, translationsSystem, appState }} />;
         },
     }),
 );
+
+/**
+ * TODO: [🐅] Maybe some more elegant way how to create icon-window pairs of modules
+ * TODO: [🍈] Some way how to hide modal modules when colldev
+ */
