@@ -1,4 +1,4 @@
-import { declareModule } from '@collboard/modules-sdk';
+import { declareModule,preview } from '@collboard/modules-sdk';
 import { contributors, description, license, repository, version } from '../../package.json';
 import { createPdf } from '../utils/createPdf';
 
@@ -25,7 +25,7 @@ declareModule({
             export({
                 artContainers,
                 boundingBox,
-
+                scope,
                 quality /* <- TODO: Use */,
                 scale /* <- TODO: Use */,
                 isMaterialized /* <- TODO: Use */,
@@ -38,22 +38,20 @@ declareModule({
                 }
 
                 return async () => {
-                    /*!!!
-                    const [svgFile] = await exportSystem.exportFiles({
+                    const [backgroundImage] = await exportSystem.exportFiles({
                         // TODO: [🌚] Some way how to chain exports - pass useOtherExport util into IFileExportOptions
-                        mimeType: 'image/svg+xml',
-                        isHeavyIncluded: true,
+                        mimeType: 'image/png',
+                        isHeavyExport: true,
                         scope,
-
-                        isMaterialized: true /* <- Note: Materialization is essential to propper bitmap conversion * /,
                         isTesting,
                     });
 
-                    let canvas = await imageToCanvas(await blobToDataUrl(svgFile));
-                    */
+                    console.log({backgroundImage});
+                    preview(backgroundImage);
 
                     return await createPdf({
                         pageSize: boundingBox.transform.scale,
+                        backgroundImage,
                         elements: artContainers
                             .map(({ element }) => element)
                             .filter((element) => element !== null) as HTMLElement[],

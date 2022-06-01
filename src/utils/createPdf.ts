@@ -1,66 +1,40 @@
-import html2canvas from 'html2canvas';
+import { blobToDataUrl, fetchAsFile } from '@collboard/modules-sdk';
 import { jsPDF } from 'jspdf';
-import { forAllImagesInElement } from 'waitasecond';
+// import { forAllImagesInElement } from 'waitasecond';
 import { Vector } from 'xyzt';
-import { findDeepestChild } from './findDeepestChild';
+// import { findDeepestChild } from './findDeepestChild';
 
 interface ICreatePdfOptions {
     pageSize: Vector;
     elements: HTMLElement[];
-    //!!! backgroundImage: Blob;
+    backgroundImage?: Blob;
 
     isTesting: boolean;
 }
 
-export async function createPdf({ pageSize, elements, /*backgroundImage, */isTesting }: ICreatePdfOptions): Promise<Blob> {
+export async function createPdf({ pageSize, elements, backgroundImage, isTesting }: ICreatePdfOptions): Promise<Blob> {
     // !!! Convert pageSize from pixels to mm
 
     const pdfDocument = new jsPDF('p', 'mm', pageSize.toArray2D());
     // TODO: @hejny Add metadata to PDF
 
     //!!!
-    const containerElement = elements[0];
+    // const containerElement = elements[0];
+    // await forAllImagesInElement(containerElement);
 
-    await forAllImagesInElement(containerElement);
-
-    const canvas = await html2canvas(containerElement, {
-        scale: 3 /* TODO: @hejny What is the ideal quality */,
-        backgroundColor: 'trasparent',
-        allowTaint: true /* <- !!! Do not need */,
-        // removeContainer: true,
-        ignoreElements: (element) => {
-            if (isTesting) {
-                return false;
-            } else {
-                return false;
-                // !!! return element.classList.contains('render-as-text');
-            }
-        },
-    });
-
-    const image = canvas.toDataURL('image/png' /* TODO: Configure quality */);
-
-    /*!!!
-    if (isTesting) {
-        canvas.style.width = PAGE_SIZE.x * PAGE_MM_TO_PX_RATIO + 'px';
-        canvas.style.height = PAGE_SIZE.y * PAGE_MM_TO_PX_RATIO + 'px';
-        canvas.style.border = '1px solid red';
-        canvas.style.position = 'fixed';
-        canvas.style.bottom = '20px';
-        canvas.style.right = '20px';
-        document.body.appendChild(canvas);
+    if (backgroundImage) {
+        pdfDocument.addImage(
+            // TODO: @hejny Compression of the image
+            await blobToDataUrl(backgroundImage),
+            'PNG',
+            0,
+            0,
+            ...pageSize.toArray2D(),
+            // TODO: More
+        );
     }
-    */
 
-    pdfDocument.addImage(
-        // TODO: @hejny Compression of the image
-        image,
-        'JPEG',
-        0,
-        0,
-        ...pageSize.toArray2D(),
-    );
-
+    /*
     const containerBoundingBox = containerElement.getBoundingClientRect();
     const originPosition = Vector.fromObject(containerBoundingBox, ['left', 'top']);
     const containerSize = Vector.fromObject(containerBoundingBox, ['width', 'height']);
@@ -99,8 +73,23 @@ export async function createPdf({ pageSize, elements, /*backgroundImage, */isTes
 
         // console.log(textElement.innerText, ...positionInPdf.toArray2D());
     }
+    */
 
     // containerElement.style.display = 'none';
+
+    if (isTesting) {
+        pdfDocument.addImage(
+            await blobToDataUrl(
+                await fetchAsFile(`https://collboard.fra1.cdn.digitaloceanspaces.com/assets/21.4.1/logo-small.png`),
+            ),
+            'PNG',
+            10,
+            10,
+            111,
+            79,
+            // TODO: More
+        );
+    }
 
     return pdfDocument.output('blob');
 }

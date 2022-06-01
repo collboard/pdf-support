@@ -19,6 +19,7 @@ export function PrintComponent({ exportSystem }: IPrintComponentProps) {
             scope: ExportScopeSimple.Board /* <- TODO: Allow to pick */,
             isHeavyExport: true,
             mimeType: 'application/pdf',
+            isTesting: true /* !!! */,
         });
 
         if (files.length === 0) {
