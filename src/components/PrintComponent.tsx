@@ -1,47 +1,50 @@
-import { ExportScopeSimple, ExportSystem, FileComponent, Loader, LoaderInline, React } from '@collboard/modules-sdk';
-import { forTime } from 'waitasecond';
-import { useAsyncMemo } from '../utils/useAsyncMemo';
+import {
+    AppState,
+    ExportScopePickerComponent,
+    ExportScopeSimple,
+    ExportSystem,
+    IExportScope,
+    React,
+    TranslationsSystem,
+} from '@collboard/modules-sdk';
+import { downloadFile } from '../utils/downloadFile';
+import { PdfComponent } from './PdfComponent';
 
 interface IPrintComponentProps {
     // TODO: [👂] Here should be used react context to get systems container OR each system
+    appState: AppState;
     exportSystem: ExportSystem;
+    translationsSystem: TranslationsSystem;
 }
 
-/**
- * @collboard-modules-sdk
- */
-export function PrintComponent({ exportSystem }: IPrintComponentProps) {
-    // TODO: !!! Allow to pick a scope
+export function PrintComponent({ exportSystem, appState, translationsSystem }: IPrintComponentProps) {
+    const [scope, setScope] = React.useState<IExportScope>(ExportScopeSimple.Board);
 
-    const pdfFile = useAsyncMemo<File | null>(async () => {
-        await forTime(5000);
-        const files = await exportSystem.exportFiles({
-            scope: ExportScopeSimple.Board /* <- TODO: Allow to pick */,
-            isHeavyExport: true,
-            mimeType: 'application/pdf',
-            isTesting: true /* !!! */,
-        });
+    return (
+        <>
+            <ExportScopePickerComponent
+                {...{ exportSystem, translationsSystem, appState }}
+                value={scope}
+                onChange={setScope}
+            />
 
-        if (files.length === 0) {
-            console.warn(`There is no PDF exported`);
-            return null;
-        } else if (files.length === 1) {
-            return files[0];
-        } else {
-            console.warn(`More than one PDF exported.`, { files });
-            return files[0];
-        }
-    }, []);
+            <button
+                className="button button-primary"
+                onClick={async () => {
+                    const [pdfFile] = await exportSystem.exportFiles({
+                        scope,
+                        isHeavyExport: true,
+                        mimeType: 'application/pdf',
+                        isTesting: true /* !!! */,
+                    });
 
-    if (pdfFile === undefined) {
-        return <Loader alt="Creating PDF" />;
-    } else if (pdfFile === null) {
-        return (
-            <LoaderInline alt="Nothing to print" icon="file-pdf" canLoadForever>
-                Nothing to print
-            </LoaderInline>
-        );
-    } else {
-        return <FileComponent file={pdfFile} />;
-    }
+                    await downloadFile(pdfFile);
+                }}
+            >
+                Print
+            </button>
+
+            <PdfComponent {...{ exportSystem, scope }} />
+        </>
+    );
 }

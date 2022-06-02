@@ -1,4 +1,4 @@
-import { declareModule,preview } from '@collboard/modules-sdk';
+import { declareModule } from '@collboard/modules-sdk';
 import { contributors, description, license, repository, version } from '../../package.json';
 import { createPdf } from '../utils/createPdf';
 
@@ -46,8 +46,8 @@ declareModule({
                         isTesting,
                     });
 
-                    console.log({backgroundImage});
-                    preview(backgroundImage);
+                    // console.log({backgroundImage});
+                    // preview(backgroundImage);
 
                     return await createPdf({
                         pageSize: boundingBox.transform.scale,

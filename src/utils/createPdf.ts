@@ -15,6 +15,8 @@ interface ICreatePdfOptions {
 export async function createPdf({ pageSize, elements, backgroundImage, isTesting }: ICreatePdfOptions): Promise<Blob> {
     // !!! Convert pageSize from pixels to mm
 
+    console.log({ pageSize });
+
     const pdfDocument = new jsPDF('p', 'mm', pageSize.toArray2D());
     // TODO: @hejny Add metadata to PDF
 

@@ -1,4 +1,5 @@
 import { declareModule, makeModalModule, React } from '@collboard/modules-sdk';
+import { forTime } from 'waitasecond';
 import { PrintComponent } from '../components/PrintComponent';
 
 declareModule(
@@ -14,6 +15,7 @@ declareModule(
                 'appState',
             );
 
+            await forTime(1000);
             return <PrintComponent {...{ exportSystem, translationsSystem, appState }} />;
         },
     }),
