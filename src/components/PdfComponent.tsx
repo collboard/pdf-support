@@ -13,7 +13,6 @@ export function PdfComponent({ exportSystem, scope }: IPrintComponentProps) {
             scope,
             isHeavyExport: true,
             mimeType: 'application/pdf',
-            isTesting: true /* !!! */,
         });
 
         if (files.length === 0) {

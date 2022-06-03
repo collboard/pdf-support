@@ -1,4 +1,4 @@
-import { declareModule } from '@collboard/modules-sdk';
+import { declareModule, SCALE_PIXELS } from '@collboard/modules-sdk';
 import { contributors, description, license, repository, version } from '../../package.json';
 import { createPdf } from '../utils/createPdf';
 
@@ -50,7 +50,9 @@ declareModule({
                     // preview(backgroundImage);
 
                     return await createPdf({
-                        pageSize: boundingBox.transform.scale,
+                        pageSize: boundingBox.transform.scale.scale(
+                            SCALE_PIXELS.centimeter / 10 /* <- TODO: USE mimimeters */,
+                        ),
                         backgroundImage,
                         elements: artContainers
                             .map(({ element }) => element)

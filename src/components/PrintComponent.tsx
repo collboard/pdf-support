@@ -1,13 +1,14 @@
 import {
     AppState,
+    downloadFile,
     ExportScopePickerComponent,
     ExportScopeSimple,
     ExportSystem,
     IExportScope,
     React,
+    Translate,
     TranslationsSystem,
 } from '@collboard/modules-sdk';
-import { downloadFile } from '../utils/downloadFile';
 import { PdfComponent } from './PdfComponent';
 
 interface IPrintComponentProps {
@@ -31,17 +32,37 @@ export function PrintComponent({ exportSystem, appState, translationsSystem }: I
             <button
                 className="button button-primary"
                 onClick={async () => {
+                    console.log(document.querySelector('iframe'));
+                    (document.querySelector('iframe') as HTMLIFrameElement).contentWindow!.print();
+                    //window.frames['printf'].focus();
+                    //window.frames['printf'].print();
+                    /*
                     const [pdfFile] = await exportSystem.exportFiles({
                         scope,
                         isHeavyExport: true,
                         mimeType: 'application/pdf',
-                        isTesting: true /* !!! */,
+                    });
+
+                    await printFile(pdfFile);
+                    */
+                }}
+            >
+                <Translate name={`Print`}>Print</Translate>
+            </button>
+
+            <button
+                className="button button-primary"
+                onClick={async () => {
+                    const [pdfFile] = await exportSystem.exportFiles({
+                        scope,
+                        isHeavyExport: true,
+                        mimeType: 'application/pdf',
                     });
 
                     await downloadFile(pdfFile);
                 }}
             >
-                Print
+                <Translate name={`Download`}>Download</Translate>
             </button>
 
             <PdfComponent {...{ exportSystem, scope }} />

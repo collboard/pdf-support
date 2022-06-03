@@ -5,6 +5,10 @@ import { Vector } from 'xyzt';
 // import { findDeepestChild } from './findDeepestChild';
 
 interface ICreatePdfOptions {
+
+  /**
+   * Page size in milimeters
+   */
     pageSize: Vector;
     elements: HTMLElement[];
     backgroundImage?: Blob;
@@ -13,7 +17,7 @@ interface ICreatePdfOptions {
 }
 
 export async function createPdf({ pageSize, elements, backgroundImage, isTesting }: ICreatePdfOptions): Promise<Blob> {
-    // !!! Convert pageSize from pixels to mm
+
 
     console.log({ pageSize });
 
