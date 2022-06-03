@@ -1,5 +1,6 @@
 import { declareModule, makeModalModule, React } from '@collboard/modules-sdk';
 import { forTime } from 'waitasecond';
+import { contributors, description, license, repository, version } from '../../package.json';
 import { PrintComponent } from '../components/PrintComponent';
 
 declareModule(
@@ -7,6 +8,14 @@ declareModule(
         manifest: {
             name: '@collboard/print',
             title: { en: 'Print', cs: 'Tisk' },
+            contributors,
+            description,
+            license,
+            repository,
+            version,
+            flags: {
+                isHidden: true /* <- TODO: Modal modules should be always hidden*/,
+            },
         },
         async createModal(systems) {
             const { exportSystem, translationsSystem, appState } = await systems.request(
