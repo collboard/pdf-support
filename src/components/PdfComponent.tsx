@@ -13,6 +13,8 @@ export function PdfComponent({ exportSystem, scope }: IPrintComponentProps) {
         try {
             return exportPdfFile({ exportSystem, scope });
         } catch (error) {
+            // TODO: [🀄] Filter here only errors that are related to pdf export
+            // tslint:disable-next-line:no-console
             console.error(error);
             return null;
         }

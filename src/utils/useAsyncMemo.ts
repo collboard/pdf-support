@@ -15,9 +15,9 @@ export function useAsyncMemo<T>(factory: () => Promise<T> | undefined | null, de
         let cancel = false;
         const promise = factory();
         if (promise === undefined || promise === null) return;
-        promise.then((val) => {
+        promise.then((val2) => {
             if (!cancel) {
-                setVal(val);
+                setVal(val2);
             }
         });
         return () => {

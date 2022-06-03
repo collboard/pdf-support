@@ -14,10 +14,12 @@ export async function exportPdfFile({
     });
 
     if (files.length === 0) {
+        // TODO: [🀄] Custom error class
         throw new Error(`There is no PDF exported`);
     } else if (files.length === 1) {
         return files[0];
     } else {
+        // tslint:disable-next-line:no-console
         console.warn(`More than one PDF exported.`, { files });
         return files[0];
     }
