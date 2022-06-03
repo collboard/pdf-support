@@ -28,9 +28,9 @@ declareModule({
                 scope,
                 quality /* <- TODO: Use */,
                 scale /* <- TODO: Use */,
-                isMaterialized /* <- TODO: Use */,
-                isLinked /* <- TODO: Use */,
-                isTransparent /* <- TODO: Use */,
+                // Note: isMaterialized doesn't matter here
+                // Note: isLinked doesn't matter here
+                // Note: isTransparent doesn't matter here
                 isTesting,
             }) {
                 if (boundingBox.width * boundingBox.height === 0) {
@@ -42,6 +42,7 @@ declareModule({
                         // TODO: [🌚] Some way how to chain exports - pass useOtherExport util into IFileExportOptions
                         mimeType: 'image/png',
                         isHeavyExport: true,
+                        scale: scale * 2 /* <- Note: To ensure better quality of background */,
                         scope,
                         isTesting,
                     });
@@ -51,7 +52,7 @@ declareModule({
 
                     return await createPdf({
                         pageSize: boundingBox.transform.scale.scale(
-                            SCALE_PIXELS.centimeter / 10 /* <- TODO: USE mimimeters */,
+                            (1 / SCALE_PIXELS.centimeter) * 10 /* <- TODO: USE mimimeters */,
                         ),
                         backgroundImage,
                         elements: artContainers

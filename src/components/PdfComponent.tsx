@@ -1,4 +1,5 @@
 import { ExportSystem, FileComponent, IExportScope, Loader, LoaderInline, React } from '@collboard/modules-sdk';
+import { exportPdfFile } from '../utils/exportPdfFile';
 import { useAsyncMemo } from '../utils/useAsyncMemo';
 
 interface IPrintComponentProps {
@@ -9,22 +10,13 @@ interface IPrintComponentProps {
 
 export function PdfComponent({ exportSystem, scope }: IPrintComponentProps) {
     const pdfFile = useAsyncMemo<File | null>(async () => {
-        const files = await exportSystem.exportFiles({
-            scope,
-            isHeavyExport: true,
-            mimeType: 'application/pdf',
-        });
-
-        if (files.length === 0) {
-            console.warn(`There is no PDF exported`);
+        try {
+            return exportPdfFile({ exportSystem, scope });
+        } catch (error) {
+            console.error(error);
             return null;
-        } else if (files.length === 1) {
-            return files[0];
-        } else {
-            console.warn(`More than one PDF exported.`, { files });
-            return files[0];
         }
-    }, [scope]);
+    }, [exportSystem, scope]);
 
     if (pdfFile === undefined) {
         return <Loader alt="Creating PDF" />;
