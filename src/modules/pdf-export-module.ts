@@ -47,8 +47,7 @@ declareModule({
                         isTesting,
                     });
 
-                    // console.log({backgroundImage});
-                    // preview(backgroundImage);
+
 
                     return await createPdf({
                         pageSize: boundingBox.transform.scale.scale(
@@ -58,7 +57,7 @@ declareModule({
                         elements: artContainers
                             .map(({ element }) => element)
                             .filter((element) => element !== null) as HTMLElement[],
-                        // !!!backgroundImage: Blob;
+
 
                         isTesting,
                     });

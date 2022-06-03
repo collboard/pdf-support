@@ -33,8 +33,9 @@ export function PrintComponent({ exportSystem, appState, translationsSystem }: I
             <button
                 className="button button-primary"
                 onClick={async () => {
-                    console.log(document.querySelector('iframe'));
-                    (document.querySelector('iframe' /* !!! */) as HTMLIFrameElement).contentWindow!.print();
+                    (
+                        document.querySelector('.pdf-support-print-preview iframe') as HTMLIFrameElement
+                    ).contentWindow!.print();
                 }}
             >
                 <Translate name={`Print`}>Print</Translate>
@@ -49,7 +50,9 @@ export function PrintComponent({ exportSystem, appState, translationsSystem }: I
                 <Translate name={`Download`}>Download</Translate>
             </button>
 
-            <PdfComponent {...{ exportSystem, scope }} />
+            <div className="pdf-support-print-preview">
+                <PdfComponent {...{ exportSystem, scope }} />
+            </div>
         </>
     );
 }
