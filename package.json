@@ -20,8 +20,8 @@
     },
     "dependencies": {},
     "devDependencies": {
-        "@types/jspdf": "^2.0.0",
-        "jspdf": "^2.5.1",
+        "@types/jspdf": "2.0.0",
+        "jspdf": "2.5.1",
         "@collboard/modules-sdk": "21.8.0",
         "destroyable": "0.9.0",
         "tslint": "6.1.3",
