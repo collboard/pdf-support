@@ -28,6 +28,7 @@ export function useAsyncMemo<T>(factory: () => Promise<T> | undefined | null, de
 }
 
 /**
+ * TODO: Import from @collboard/modules-sdk
  * Note: Hook must used React instance exported from @collboard/modules-sdk
  *       So this is a copy of @see https://github.com/awmleer/use-async-memo/blob/master/src/index.ts
  */
