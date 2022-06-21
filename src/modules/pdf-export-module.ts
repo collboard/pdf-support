@@ -22,7 +22,7 @@ declareModule({
             priority: 0,
             mimeType: `application/pdf`,
             isHeavy: true,
-            export({
+            exportFile({
                 artContainers,
                 boundingBox,
                 scope,

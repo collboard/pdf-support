@@ -39,7 +39,7 @@ declareModule({
 
         return importSystem.registerFileSupport({
             priority: 10,
-            async processFile({ logger, file, boardPosition, previewOperation, willCommitArts, next }) {
+            async importFile({ logger, file, boardPosition, previewOperation, willCommitArts, next }) {
                 if (file.type !== 'application/pdf') {
                     return next();
                 }
