@@ -9,6 +9,7 @@ import {
     measureImageSize,
     ShapeArt,
     ShapeName,
+    windowSize,
 } from '@collboard/modules-sdk';
 import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../../package.json';
@@ -61,8 +62,8 @@ declareModule({
                     );
                     imageArt.size = fitInside({
                         isUpscaling: false,
-                        objectSize: await (await measureImageSize(imageDataUrl)).divide(appState.transform.scale),
-                        containerSize: appState.windowSize.divide(appState.transform.scale),
+                        objectSize: await (await measureImageSize(imageDataUrl)).divide(appState.transform.value.scale),
+                        containerSize: windowSize.value.divide(appState.transform.value.scale),
                     });
                     imageArt.opacity = 0.5;
                     imageArt.locked = true;
@@ -70,7 +71,7 @@ declareModule({
                     const borderArt = new ShapeArt(
                         ShapeName.Rectange,
                         '#ccc',
-                        3 / appState.transform.scale.x,
+                        3 / appState.transform.value.scale.x,
                         imageArt.shift,
                         imageArt.size,
                     );
@@ -86,7 +87,7 @@ declareModule({
 
                     boardPosition = boardPosition
                         .add(new Vector(imageArt.size).rearrangeAxis(([x, y, z]) => [0, y, 0]))
-                        .add(new Vector(0, 30).scale(1 / appState.transform.scale.x));
+                        .add(new Vector(0, 30).scale(1 / appState.transform.value.scale.x));
 
                     previewOperation.update(imageArt /* TODO: Also borderArt */);
 
