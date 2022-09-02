@@ -1,6 +1,5 @@
 import {
     AppState,
-    downloadFile,
     ExportScopePickerComponent,
     ExportScopeSimple,
     ExportSystem,
@@ -8,6 +7,7 @@ import {
     React,
     Translate,
     TranslationsSystem,
+    triggerFileDownload,
 } from '@collboard/modules-sdk';
 import { exportPdfFile } from '../utils/exportPdfFile';
 import { PdfComponent } from './PdfComponent';
@@ -44,7 +44,7 @@ export function PrintComponent({ exportSystem, appState, translationsSystem }: I
             <button
                 className="button button-primary"
                 onClick={async () => {
-                    await downloadFile(await exportPdfFile({ exportSystem, scope }));
+                    await triggerFileDownload(await exportPdfFile({ exportSystem, scope }));
                 }}
             >
                 <Translate name={`Download`}>Download</Translate>

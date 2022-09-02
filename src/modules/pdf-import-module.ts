@@ -1,8 +1,8 @@
 import {
     Abstract2dArt,
-    blobToDataUrl,
+    blobToDataurl,
     centerArts,
-    dataUrlToBlob,
+    dataurlToBlob,
     declareModule,
     fitInside,
     ImageArt,
@@ -50,7 +50,7 @@ declareModule({
 
                 const pdfFile = file;
 
-                const pdfDataUrl = await blobToDataUrl(pdfFile);
+                const pdfDataUrl = await blobToDataurl(pdfFile);
                 const imagesDataUrl = await pdfToImages(pdfDataUrl);
 
                 const result: Abstract2dArt[] = [];
@@ -91,7 +91,7 @@ declareModule({
 
                     previewOperation.update(imageArt /* TODO: Also borderArt */);
 
-                    const imageSrc = await usercontentSystem.upload(await dataUrlToBlob(imageDataUrl));
+                    const imageSrc = await usercontentSystem.upload(await dataurlToBlob(imageDataUrl));
                     imageArt.src = imageSrc;
                     imageArt.opacity = 1;
 

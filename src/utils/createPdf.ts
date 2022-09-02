@@ -1,14 +1,13 @@
-import { blobToDataUrl, fetchAsFile } from '@collboard/modules-sdk';
+import { blobToDataurl, fetchAsFile } from '@collboard/modules-sdk';
 import { jsPDF } from 'jspdf';
 // import { forAllImagesInElement } from 'waitasecond';
 import { Vector } from 'xyzt';
 // import { findDeepestChild } from './findDeepestChild';
 
 interface ICreatePdfOptions {
-
-  /**
-   * Page size in milimeters
-   */
+    /**
+     * Page size in milimeters
+     */
     pageSize: Vector;
     elements: HTMLElement[];
     backgroundImage?: Blob;
@@ -17,8 +16,6 @@ interface ICreatePdfOptions {
 }
 
 export async function createPdf({ pageSize, elements, backgroundImage, isTesting }: ICreatePdfOptions): Promise<Blob> {
-
-
     const pdfDocument = new jsPDF('p', 'mm', pageSize.toArray2D());
     // TODO: @hejny Add metadata to PDF
 
@@ -29,7 +26,7 @@ export async function createPdf({ pageSize, elements, backgroundImage, isTesting
     if (backgroundImage) {
         pdfDocument.addImage(
             // TODO: @hejny Compression of the image
-            await blobToDataUrl(backgroundImage),
+            await blobToDataurl(backgroundImage),
             'PNG',
             0,
             0,
@@ -83,7 +80,7 @@ export async function createPdf({ pageSize, elements, backgroundImage, isTesting
 
     if (isTesting) {
         pdfDocument.addImage(
-            await blobToDataUrl(
+            await blobToDataurl(
                 await fetchAsFile(`https://collboard.fra1.cdn.digitaloceanspaces.com/assets/21.4.1/logo-small.png`),
             ),
             'PNG',
