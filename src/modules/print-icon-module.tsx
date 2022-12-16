@@ -1,4 +1,4 @@
-import { declareModule, makeIconModuleOnRoute, ToolbarName } from '@collboard/modules-sdk';
+import { ToolbarName, declareModule, makeIconModuleOnRoute } from '@collboard/modules-sdk';
 import { contributors, description, license, repository, version } from '../../package.json';
 
 // TODO: [🐅] Maybe some more elegant way how to create icon-window pairs of modules
@@ -8,6 +8,7 @@ declareModule(
         manifest: {
             name: '@collboard/print-icon',
             title: { en: 'Print icon on toolbar', cs: 'Ikonka tisku na liště' },
+            requirePermissions: ['view'],
             contributors,
             description,
             license,
