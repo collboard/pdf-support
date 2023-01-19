@@ -20,7 +20,7 @@ declareModule({
         return controlSystem.registerControl({
             defaultShortcut: ['Control', 'p'],
             executor() {
-                routingSystem.urlVariables.setValue({ module: '@collboard/print', modulePath: null });
+                routingSystem.urlVariables.setValue({ moduleName: '@collboard/print', modulePath: null });
             },
         });
     },
