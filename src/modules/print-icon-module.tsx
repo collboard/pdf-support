@@ -21,7 +21,7 @@ declareModule(
             order: 30,
         },
         routeParams: {
-            module: '@collboard/print',
+            moduleName: '@collboard/print',
             modulePath: null,
         },
     }),
