@@ -1,13 +1,13 @@
 import {
-    AppState,
-    ExportScopePickerComponent,
-    ExportScopeSimple,
-    ExportSystem,
-    IExportScope,
-    React,
-    Translate,
-    TranslationsSystem,
-    triggerFileDownload,
+  AppState,
+  ExportScopePickerComponent,
+  ExportScopeSimple,
+  ExportSystem,
+  IExportScope,
+  React,
+  Translate,
+  TranslationsSystem,
+  triggerFileDownload
 } from '@collboard/modules-sdk';
 import { exportPdfFile } from '../utils/exportPdfFile';
 import { PdfComponent } from './PdfComponent';
