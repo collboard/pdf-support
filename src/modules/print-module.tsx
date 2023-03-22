@@ -1,9 +1,11 @@
-import { declareModule, makeModalModule, React } from '@collboard/modules-sdk';
+import { React, declareModule, makeModalModule, makeMultiModule } from '@collboard/modules-sdk';
+import { Registration } from 'destroyable';
 import { contributors, description, license, repository, version } from '../../package.json';
 import { PrintComponent } from '../components/PrintComponent';
+import { ModuleInstallation } from '@collboard/modules-sdk/types/50-systems/ModuleStore/ModuleInstallation';
 
 declareModule(
-    makeModalModule({
+    makeMultiModule({
         manifest: {
             name: '@collboard/print',
             title: { en: 'Print', cs: 'Tisk' },
@@ -16,16 +18,36 @@ declareModule(
                 isHidden: true /* <- TODO: Modal modules should be always hidden*/,
             },
         },
-        async createModal(systems) {
-            const { exportSystem, translationsSystem, appState } = await systems.request(
-                'exportSystem',
-                'translationsSystem',
-                'appState',
-            );
+        modules: [
+            makeModalModule({
+                async createModal(systems) {
+                    const { exportSystem, translationsSystem, appState } = await systems.request(
+                        'exportSystem',
+                        'translationsSystem',
+                        'appState',
+                    );
 
-            // await forTime(1000);
-            return <PrintComponent {...{ exportSystem, translationsSystem, appState }} />;
-        },
+                    // await forTime(1000);
+                    return <PrintComponent {...{ exportSystem, translationsSystem, appState }} />;
+                },
+            }),
+            {
+                async setup(systems) {
+                    const { moduleInstaller } = await systems.request('moduleInstaller');
+
+                    const frames = await exportSystem.getFrames();
+
+
+                    ModuleInstallation.install()
+
+                    console.log({ frames });
+
+                    // TODO: !!! Show virtual frame whenprinting
+
+                    return Registration.void();
+                },
+            },
+        ],
     }),
 );
 
