@@ -19,7 +19,7 @@ export async function createPdf({ pageSize, elements, backgroundImage, isTesting
     const pdfDocument = new jsPDF('p', 'mm', pageSize.toArray2D());
     // TODO: @hejny Add metadata to PDF
 
-    // TODO: !!!
+    // !!!
     // const containerElement = elements[0];
     // await forAllImagesInElement(containerElement);
 
