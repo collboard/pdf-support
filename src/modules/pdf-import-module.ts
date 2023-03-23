@@ -1,15 +1,15 @@
 import {
-    Abstract2dArt,
-    blobToDataurl,
-    centerArts,
-    dataurlToBlob,
-    declareModule,
-    fitInside,
-    ImageArt,
-    measureImageSize,
-    ShapeArt,
-    ShapeName,
-    windowSize,
+  Abstract2dArt,
+  blobToDataurl,
+  centerArts,
+  dataurlToBlob,
+  declareModule,
+  fitInside,
+  ImageArt,
+  measureImageSize,
+  ShapeArt,
+  ShapeName,
+  windowSize
 } from '@collboard/modules-sdk';
 import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../../package.json';
