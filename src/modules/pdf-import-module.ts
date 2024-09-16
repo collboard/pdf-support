@@ -1,15 +1,15 @@
 import {
-  Abstract2dArt,
-  blobToDataurl,
-  centerArts,
-  dataurlToBlob,
-  declareModule,
-  fitInside,
-  ImageArt,
-  measureImageSize,
-  ShapeArt,
-  ShapeName,
-  windowSize
+    Abstract2dArt,
+    blobToDataurl,
+    centerArts,
+    dataurlToBlob,
+    declareModule,
+    fitInside,
+    ImageArt,
+    measureImageSize,
+    ShapeArt,
+    ShapeName,
+    windowSize,
 } from '@collboard/modules-sdk';
 import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../../package.json';
@@ -86,7 +86,7 @@ declareModule({
                     logger.info(`Page ${i + 1}/${imagesDataUrl.length}`, imageArt);
 
                     boardPosition = boardPosition
-                        .add(new Vector(imageArt.size).rearrangeAxis(([x, y, z]) => [0, y, 0]))
+                        .add(new Vector(imageArt.size).rearrangeAxes(([x, y, z]) => [0, y, 0]))
                         .add(new Vector(0, 30).scale(1 / appState.transform.value.scale.x));
 
                     previewOperation.update(imageArt /* TODO: Also borderArt */);
