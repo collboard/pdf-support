@@ -1,6 +1,6 @@
 {
     "name": "@collboard/pdf-support",
-    "version": "2.0.163",
+    "version": "2.0.164",
     "description": "Support for PDF documents for Collboard.com See all file support modules for Collboard.",
     "license": "SEE LICENSE IN LICENSE",
     "contributors": [
